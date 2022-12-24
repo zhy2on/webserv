@@ -6,13 +6,12 @@
 
 class Uri {
    public:
-	typedef std::map<std::string, std::string> query_map_type;
 	Uri(const std::string &uri);
 	~Uri();
 
 	const std::string &GetOriginUri() const;
 	const std::string &GetPath() const;
-	const query_map_type &GetQueryMap() const;
+	const std::string &GetQuery() const;
 
 	void SplitUri();
 	std::string ToString();
@@ -20,10 +19,9 @@ class Uri {
    private:
 	std::string origin_uri_;
 	std::string path_;
-	std::map<std::string, std::string> query_map_;
+	std::string query_;
 
 	void ApplyConfigToPath();
-	void ParsingQueryString(const std::string &query);
 };
 
 std::ostream &operator<<(std::ostream &out, Uri uri);

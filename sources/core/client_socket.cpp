@@ -7,9 +7,15 @@ ClientSocket::ClientSocket(int sock_d, const std::vector<ServerInfo> &server_inf
  : Socket(server_infos,Socket::CLIENT_TYPE, sock_d), request_(100000) {
 }
 
-
-
 ClientSocket::~ClientSocket() {}
+
+RequestMessage &ClientSocket::GetRequestMessage() {
+	return request_;
+}
+
+ResponseMessage &ClientSocket::GetResponseMessage() {
+	return response_;
+}
 
 void ClientSocket::RecvRequest() {
 	char tmp[BUFFER_SIZE];

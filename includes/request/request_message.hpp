@@ -28,6 +28,7 @@ class RequestMessage {
 	bool				IsAlive() const;
 
 	RequestState		GetState() const;
+	const std::string	&GetHeaderValue(const std::string &key) const;
 	const std::string	&GetTempHeaderName() const;
 	const std::string	&GetTempHeaderValue() const;
 	bool				IsLastChunk() const;

@@ -69,5 +69,6 @@ void Webserv::HandleClientSocketEvent(Udata *user_data, struct kevent event) {
 		case READ_FILE: break; // GET
 		case PIPE_READ: break; // CGI
 		case PIPE_WRITE: break; // CGI
+
 	}
 }

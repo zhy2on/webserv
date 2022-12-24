@@ -24,6 +24,11 @@ RequestState	RequestMessage::GetState() const {
 	return (state_);
 }
 
+const std::string	&RequestMessage::GetHeaderValue(const std::string &key) const {
+	RequestMessage::headers_type::const_iterator it = headers_.find(key);
+	return it->second;
+}
+
 const std::string	&RequestMessage::GetTempHeaderName() const
 {
 	return (temp_header_name_);

@@ -10,22 +10,42 @@ extern char **environ;
 #include <map>
 #include <string>
 
-# define READ 0
-# define WRITE 1
+#include "kqueue_handler.hpp"
+#include "request_message.hpp"
+#include "udata.h"
+#include "uri.hpp"
+
+#define READ 0
+#define WRITE 1
 
 class CgiHandler {
-   private:
-	std::map<std::string, std::string> env;
-	void ParseEnviron();
-	char **ConvertEnvToCharSequence();
-	void OpenPipe(int *pipe_fd);
    public:
 	CgiHandler();
-	void AddEnv(const std::string& key, const std::string& value);
-	void SetCgiEnv();
-	std::string RunCgi();
+	~CgiHandler();
 
+	void OpenPipe(KqueueHandler &kq_handler, Udata *user_data);
+	void SetCgiEnvs(RequestMessage request_, Uri uri);
 
+	void SetupCgiResultPipe();
+	void SetupReqBodyPipe();
+
+	void RunChildCgi();
+	void SetupAndAddEvent(KqueueHandler &kq_handler, Udata *user_data,
+						  RequestMessage request_);
+
+	static void WriteReqBodyToCgi(const int &fd, const RequestMessage &reqeust);
+	static void ReadCgiResultFormCgi(struct kevent event,
+									 KqueueHandler &kq_handler);
+
+   private:
+	char **env_list_;
+	std::map<std::string, std::string> cgi_envs_;
+
+	int req_body_pipe_[2];
+	int cgi_result_pipe_[2];
+
+	void ParseEnviron();
+	void ConvertEnvToCharSequence();
 };
 
-#endif //WEBSERV_INCLUDES_CGI_HANDLER_H_
+#endif	// WEBSERV_INCLUDES_CGI_HANDLER_H_
