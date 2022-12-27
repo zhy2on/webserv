@@ -3,6 +3,7 @@
 
 #include "config_parser.hpp"
 #include "character_color.hpp"
+#include "config_utils.hpp"
 
 std::string ConfigParser::white_spaces = " \r\n\t\v\f";
 
@@ -48,7 +49,7 @@ ConfigParser::ConfigParser(const char *file) {
 
 ConfigParser::~ConfigParser() {}
 
-void ConfigParser::Parse(servers_type &server_blocks) {
+void ConfigParser::Parse(server_infos_type &server_blocks) {
 	size_t pre = 0;
 	size_t cur = 0;
 	while (cur != std::string::npos) {
@@ -181,24 +182,9 @@ void ConfigParser::SetServer(ServerInfo &server, std::string key,
 		else
 			server.SetAutoindex(false);
 	} else if (key == "index") {
-		std::vector<std::string> temp = Split(value, ' ');
-		for (size_t i = 0; i != temp.size(); i++)
-			server.SetIndex(temp[i]);
-	} else if (key == "allow_methods") {
-		std::vector<std::string> temp = Split(value, ' ');
-		for (size_t i = 0; i < temp.size(); i++) {
-			if (temp[i] != "GET" && temp[i] != "POST" && temp[i] != "DELETE")
-				server.SetAllowMethods("INVALID");
-			else
-				server.SetAllowMethods(temp[i]);
-		}
+		server.SetIndex(value);
 	} else if (key == "error_page") {
-		std::vector<std::string> temp = Split(value, ' ');
-		std::vector<int> pages; // 얘 어디서 쓰이지?
-		std::string path = temp[temp.size() - 1];
-		for (size_t i = 0; i < temp.size() - 1; i++) {
-			server.SetErrorPages(std::pair<int, std::string>(atoi(temp[i].c_str()), path));
-		}
+		server.SetErrorPages(value);
 	}
 }
 
@@ -207,9 +193,9 @@ void ConfigParser::SetLocation(LocationInfo &location, std::string key,
 	if (key == "root") {
 		location.SetRoot(value);
 	} else if (key == "index") {
-		std::vector<std::string> temp = Split(value, ' ');
-		for (size_t i = 0; i != temp.size(); i++)
-			location.SetIndex(temp[i]);
+		location.SetIndex(value);
+	} else if (key == "error_page") {
+		location.SetErrorPages(value);
 	} else if (key == "allow_methods") {
 		std::vector<std::string> temp = Split(value, ' ');
 		for (size_t i = 0; i < temp.size(); i++) {
@@ -229,18 +215,7 @@ void ConfigParser::SetLocation(LocationInfo &location, std::string key,
 	}
 }
 
-std::vector<std::string> ConfigParser::Split(std::string input,
-											 char delimiter) {
-	std::vector<std::string> str;
-	std::stringstream ss(input);
-	std::string temp;
-
-	while (std::getline(ss, temp, delimiter)) str.push_back(temp);
-
-	return str;
-}
-
-void ConfigParser::PrintConf(servers_type &server_blocks) {
+void ConfigParser::PrintConf(server_infos_type &server_blocks) {
 	std::cout << C_BOLD << C_GREEN << "[Server Configuration Info]" << C_NOBOLD << C_NOITALIC
 			  << std::endl;
 	for (size_t i = 0; i < server_blocks.size(); i++) {
@@ -250,22 +225,22 @@ void ConfigParser::PrintConf(servers_type &server_blocks) {
 	std::cout << C_RESET;
 }
 
-void ConfigParser::ParseUse(use_type &use_map, std::vector<ServerInfo> &server_blocks) {
+void ConfigParser::ParseConfigs(server_configs_type &server_configs, std::vector<ServerInfo> &server_blocks) {
 	std::vector<ServerInfo> server_temp;
-	use_type::iterator it;
+	server_configs_type::iterator it;
 	for (size_t i = 0; i < server_blocks.size(); i++) {
-		it = use_map.find(server_blocks[i].GetHostPort());
-		if (it == use_map.end()) {
+		it = server_configs.find(server_blocks[i].GetHostPort());
+		if (it == server_configs.end()) {
 			server_temp.clear();
 			server_temp.push_back(server_blocks[i]);
-			use_map.insert(make_pair(server_blocks[i].GetHostPort(), server_temp));
+			server_configs.insert(make_pair(server_blocks[i].GetHostPort(), server_temp));
 		} else {
 			server_temp.push_back(server_blocks[i]);
-			use_map.erase(it);
-			use_map.insert(make_pair(server_blocks[i].GetHostPort(), server_temp));
+			server_configs.erase(it);
+			server_configs.insert(make_pair(server_blocks[i].GetHostPort(), server_temp));
 		}
 	}
-	for (use_type::iterator se = use_map.begin(); se != use_map.end(); se++) {
+	for (server_configs_type::iterator se = server_configs.begin(); se != server_configs.end(); se++) {
 		for (size_t i = 0; i < se->second.size(); i++)
 			std::cout << i << " " << se->first << "|" << se->second[i].GetClientMaxBodySize() << std::endl;
 	}

@@ -12,7 +12,7 @@ extern char **environ;
 
 #include "kqueue_handler.hpp"
 #include "request_message.hpp"
-#include "udata.h"
+#include "udata.hpp"
 #include "uri.hpp"
 
 #define READ 0
@@ -24,7 +24,13 @@ class CgiHandler {
 	~CgiHandler();
 
 	void OpenPipe(KqueueHandler &kq_handler, Udata *user_data);
+
+	int OpenBodyPipe();
+	int OpenResultPipe();
+
 	void SetCgiEnvs(RequestMessage request_, Uri uri);
+
+	void PrepareCgi(RequestMessage request_);
 
 	void SetupCgiResultPipe();
 	void SetupReqBodyPipe();

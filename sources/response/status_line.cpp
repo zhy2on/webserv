@@ -2,7 +2,7 @@
 // Created by 김민준 on 2022/12/19.
 //
 
-#include "status_line.h"
+#include "status_line.hpp"
 #include "character_const.hpp"
 
 #include <sstream>
@@ -18,6 +18,11 @@ std::string StatusLine::ToString() {
 }
 
 StatusLine::StatusLine() {
+}
+
+void StatusLine::Clear() {
+	status_code_ = 0;
+	reason_phrase_.clear();
 }
 
 std::ostream &operator<<(std::ostream &out, StatusLine status_line) {

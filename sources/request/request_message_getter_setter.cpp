@@ -43,7 +43,7 @@ bool	RequestMessage::IsLastChunk() const {
 	return (last_chunk_flag_);
 }
 
-size_t	RequestMessage::GetChunkSize() const {
+int	RequestMessage::GetChunkSize() const {
 	return (chunk_size_);
 }
 
@@ -75,6 +75,13 @@ const std::string	&RequestMessage::GetBody() const {
 	return (body_);
 }
 
+const std::vector<std::string> &RequestMessage::GetResolvedUri() const {
+	return resolved_uri_;
+}
+
+void RequestMessage::SetClientMaxBodySize(int max_size) {
+	client_max_body_size_ = max_size;
+}
 
 void RequestMessage::SetState(RequestState code) {
 	state_ = code;
@@ -82,6 +89,14 @@ void RequestMessage::SetState(RequestState code) {
 
 void RequestMessage::SetStatusCode(StatusCode code) {
 	status_code_ = code;
+}
+
+void RequestMessage::SetChunked(bool is_chunked) {
+	is_chunked_ = is_chunked;
+}
+
+void  RequestMessage::SetContentSize(int size) {
+	content_size_ = size;
 }
 
 void RequestMessage::SetConnection(bool is_keep_alive) {
@@ -96,6 +111,10 @@ void RequestMessage::SetChunkSize(size_t size) {
 	chunk_size_ = size;
 }
 
+void RequestMessage::SetResolvedUri(const std::vector<std::string> &resolvedUri) {
+    resolved_uri_ = resolvedUri;
+}
+
 void RequestMessage::ClearChunkSize() {
 	chunk_size_ = 0;
 }
@@ -107,4 +126,3 @@ void RequestMessage::ClearChunkSizeStr() {
 void RequestMessage::ClaerChunkBody() {
 	chunk_body_ = "";
 }
-
