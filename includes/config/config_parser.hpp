@@ -9,7 +9,6 @@
 
 class ConfigParser {
    public:
-	static std::string white_spaces;
 	typedef std::map<std::string, std::vector<ServerInfo> > server_configs_type;
 	typedef std::vector<ServerInfo> server_infos_type;
 
@@ -25,6 +24,8 @@ class ConfigParser {
 
 	void ParseConfigs(server_configs_type &server_configs,
 					  std::vector<ServerInfo> &server_blocks);
+
+	void RunConfigParser(ConfigParser::server_configs_type &server_configs);
 
 	class FstreamException : public std::exception {
 	   public:
@@ -63,7 +64,7 @@ class ConfigParser {
 
    private:
 	std::string config_;
-
+	
 	ServerInfo ParseServer(size_t &i);
 	LocationInfo ParseLocation(size_t &i);
 };

@@ -1,20 +1,17 @@
 #include "config_parser.hpp"
-
+#include "character_color.hpp"
+#include "config_utils.hpp"
+#include "character_const.hpp"
 #include <iostream>
 #include <sstream>
 
-#include "character_color.hpp"
-#include "config_utils.hpp"
-
-std::string ConfigParser::white_spaces = " \r\n\t\v\f";
-
 std::string &ltrim(std::string &str) {
-	str.erase(0, str.find_first_not_of(ConfigParser::white_spaces));
+	str.erase(0, str.find_first_not_of(WHITESPACE));
 	return str;
 }
 
 std::string &rtrim(std::string &str) {
-	str.erase(str.find_last_not_of(ConfigParser::white_spaces) + 1);
+	str.erase(str.find_last_not_of(WHITESPACE) + 1);
 	return str;
 }
 
@@ -52,7 +49,7 @@ void ConfigParser::Parse(server_infos_type &server_blocks) {
 	size_t pre = 0;
 	size_t cur = 0;
 	while (cur != std::string::npos) {
-		pre = config_.find_first_not_of(white_spaces, cur);
+		pre = config_.find_first_not_of(WHITESPACE, cur);
 		cur = config_.find_first_of(" \t\n\v\f\r{", pre);
 		std::string key = config_.substr(pre, cur - pre);
 		if (key != "server") {
@@ -66,30 +63,30 @@ ServerInfo ConfigParser::ParseServer(size_t &i) {
 	std::string key;
 	std::string value;
 	ServerInfo server;
-	size_t pre = config_.find_first_not_of(white_spaces, i);
+	size_t pre = config_.find_first_not_of(WHITESPACE, i);
 	if (pre == std::string::npos || config_[pre] != '{') {
 		throw ServerException();
 	}
 	pre++;
-	size_t cur = config_.find_first_not_of(white_spaces, pre);
+	size_t cur = config_.find_first_not_of(WHITESPACE, pre);
 	while (cur != std::string::npos) {
-		if ((pre = config_.find_first_not_of(white_spaces, cur)) ==
+		if ((pre = config_.find_first_not_of(WHITESPACE, cur)) ==
 			std::string::npos) {
 			throw ServerException();
 		}
-		if ((cur = config_.find_first_of(white_spaces, pre)) ==
+		if ((cur = config_.find_first_of(WHITESPACE, pre)) ==
 			std::string::npos) {
 			throw ServerException();
 		}
 		key = config_.substr(pre, cur - pre);
 		if (key == "}") {
-			i = config_.find_first_not_of(white_spaces, cur + 1);
+			i = config_.find_first_not_of(WHITESPACE, cur + 1);
 			break;
 		}
 		if (key == "location") {
 			server.SetLocations((ParseLocation(cur)));
 		} else {
-			if ((pre = config_.find_first_not_of(white_spaces, cur)) ==
+			if ((pre = config_.find_first_not_of(WHITESPACE, cur)) ==
 				std::string::npos) {
 				throw ServerException();
 			}
@@ -108,31 +105,31 @@ LocationInfo ConfigParser::ParseLocation(size_t &i) {
 	std::string value;
 	LocationInfo location;
 
-	size_t pre = config_.find_first_not_of(white_spaces, i);
-	size_t cur = config_.find_first_of(white_spaces, pre);
+	size_t pre = config_.find_first_not_of(WHITESPACE, i);
+	size_t cur = config_.find_first_of(WHITESPACE, pre);
 	location.SetPath(config_.substr(pre, cur - pre));
 
-	pre = config_.find_first_not_of(white_spaces, cur);
+	pre = config_.find_first_not_of(WHITESPACE, cur);
 	if (pre == std::string::npos || config_[pre] != '{') {
 		throw LocationException();
 	}
 	pre++;
-	cur = config_.find_first_of(white_spaces, pre);
+	cur = config_.find_first_of(WHITESPACE, pre);
 	while (cur != std::string::npos) {
-		if ((pre = config_.find_first_not_of(white_spaces, cur)) ==
+		if ((pre = config_.find_first_not_of(WHITESPACE, cur)) ==
 			std::string::npos) {
 			throw LocationException();
 		}
-		if ((cur = config_.find_first_of(white_spaces, pre)) ==
+		if ((cur = config_.find_first_of(WHITESPACE, pre)) ==
 			std::string::npos) {
 			throw LocationException();
 		}
 		key = config_.substr(pre, cur - pre);
 		if (key == "}") {
-			i = config_.find_first_not_of(white_spaces, cur + 1);
+			i = config_.find_first_not_of(WHITESPACE, cur + 1);
 			break;
 		} else {
-			if ((pre = config_.find_first_not_of(white_spaces, cur)) ==
+			if ((pre = config_.find_first_not_of(WHITESPACE, cur)) ==
 				std::string::npos) {
 				throw LocationException();
 			}
@@ -244,4 +241,13 @@ void ConfigParser::ParseConfigs(server_configs_type &server_configs,
 			std::cout << i << " " << se->first << "|"
 					  << se->second[i].GetClientMaxBodySize() << std::endl;
 	}
+}
+
+
+void ConfigParser::RunConfigParser(ConfigParser::server_configs_type &server_configs) {
+	std::vector<ServerInfo> server_blocks;
+	
+	this->Parse(server_blocks);
+	this->PrintConf(server_blocks);
+	this->ParseConfigs(server_configs, server_blocks);
 }
