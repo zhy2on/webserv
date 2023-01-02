@@ -17,7 +17,7 @@ void ParseRequest(RequestMessage & req_msg,
 	while (*input != '\0' && req_msg.GetState() != DONE)
 	{
 		RequestState curr_state = req_msg.GetState();
-		if (START_METHOD <= curr_state && curr_state <= START_END)
+		if (START_REQUEST <= curr_state && curr_state <= START_END)
 			ParseStartLine(req_msg, *input++);
 		else if (HEADER_NAME <= curr_state && curr_state <= HEADER_END)
 			ParseHeader(req_msg, *input++);
@@ -33,6 +33,15 @@ static void ParseStartLine(RequestMessage & req_msg, char c)
 {
 	switch (req_msg.GetState())
 	{
+		case START_REQUEST :
+			if (isupper(c) == true)
+				req_msg.AppendMethod(c);
+			else {
+				req_msg.SetConnection(false);
+				throw HttpException(BAD_REQUEST,
+					"(request startline) : syntax error. invalid char for METHOD");
+			}
+			break;
 		case START_METHOD :
 			if (isupper(c) == true)
 				req_msg.AppendMethod(c);
