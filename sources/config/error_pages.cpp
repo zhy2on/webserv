@@ -15,7 +15,7 @@ void ErrorPages::Append(std::string &error_pages) {
 			std::pair<int, std::string>(atoi(temp[i].c_str()), path));
 	}
 }
-
+// 이름 GetErrorPagePath
 const std::string ErrorPages::GetPath(int &num) const {
 	for (error_page_type::const_iterator it = error_pages_.begin();
 		 it != error_pages_.end(); it++) {

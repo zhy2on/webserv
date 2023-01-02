@@ -26,7 +26,7 @@ class ConfigParser {
 					  std::vector<ServerInfo> &server_blocks);
 
 	void RunConfigParser(ConfigParser::server_configs_type &server_configs);
-	static void ConfigSetUp(const std::string &config);
+	// static ConfigParser::server_configs_type ConfigSetUp(const std::string &config);
 	class FstreamException : public std::exception {
 	   public:
 		const char *what() const throw() {

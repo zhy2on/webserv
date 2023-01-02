@@ -7,7 +7,9 @@
 
 #include "error_pages.hpp"
 #include "index.hpp"
+#include "cgi.hpp"
 #include "allow_methods.hpp"
+
 class LocationInfo {
    public:
 	LocationInfo();
@@ -30,8 +32,7 @@ class LocationInfo {
 	void SetIndex(std::string &x);
 	void SetErrorPages(std::string &x);
 	void SetAllowMethods(std::string &x);
-	void SetCgi(const std::vector<std::string> &x);
-	void SetCgi(const std::string &x);
+	void SetCgi(std::string &x);
 	void SetAutoindex(const bool &x);
 	void SetRedirect(const std::string &x);
 
@@ -52,7 +53,8 @@ class LocationInfo {
 	Index index_;
 	ErrorPages error_pages_;
 	AllowMethods allow_methods_;
-	std::vector<std::string> cgi_;
+	// std::vector<std::string> cgi_;
+	Cgi cgi_;
 	std::string redirect_;
 };
 

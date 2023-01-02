@@ -183,8 +183,7 @@ void ConfigParser::SetLocation(LocationInfo &location, std::string key,
 	} else if (key == "allow_methods") {
 		location.SetAllowMethods(value);
 	} else if (key == "cgi") {
-		std::vector<std::string> temp = Split(value, ' ');
-		for (size_t i = 0; i != temp.size(); i++) location.SetCgi(temp[i]);
+		location.SetCgi(value);
 	} else if (key == "client_max_body_size") {
 		location.SetClientMaxBodySize(atoi(value.c_str()));
 	} else if (key == "autoindex") {
@@ -240,7 +239,8 @@ void ConfigParser::RunConfigParser(ConfigParser::server_configs_type &server_con
 	ParseConfigs(server_configs, server_blocks);
 }
 
-void ConfigParser::ConfigSetUp(const std::string &config) {
-	// ConfigParser config_parser(config);
+// ConfigParser::server_configs_type ConfigParser::ConfigSetUp(const std::string &config) {
+// 	std::vector<ServerInfo> server_blocks;
+// 	ConfigParser::server_configs_type server_configs;
 
-}
+// }

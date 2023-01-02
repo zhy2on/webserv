@@ -42,7 +42,7 @@ const std::vector<std::string> &LocationInfo::GetAllowMethods() const {
 }
 
 const std::vector<std::string> &LocationInfo::GetCgi() const {
-	return this->cgi_;
+	return this->cgi_.GetCgi();
 }
 bool LocationInfo::GetAutoindex() const { return this->autoindex_; }
 
@@ -76,17 +76,20 @@ void LocationInfo::SetAllowMethods(std::string &x) {
 	this->allow_methods_.Append(x);
 }
 
-void LocationInfo::SetCgi(const std::string &x) { this->cgi_.push_back(x); }
+// void LocationInfo::SetCgi(const std::string &x) { this->cgi_.push_back(x); }
 
-void LocationInfo::SetCgi(const std::vector<std::string> &x) { this->cgi_ = x; }
-
+// void LocationInfo::SetCgi(const std::vector<std::string> &x) { this->cgi_ = x; }
+void LocationInfo::SetCgi(std::string &x) {
+	Cgi cgi(x);
+	this->cgi_ = cgi;
+}
 void LocationInfo::SetAutoindex(const bool &x) { this->autoindex_ = x; }
 
 void LocationInfo::SetRedirect(const std::string &x) { this->redirect_ = x; }
 
 // is function
 bool LocationInfo::IsCgi() const {
-	if (this->cgi_.size() <= 0) return false;
+	if (this->cgi_.GetCgi().size() <= 0) return false;
 	return true;
 }
 
@@ -130,9 +133,7 @@ std::string LocationInfo::ToString() const {
 	ss << allow_methods_;
 	ss << "\n      redirect : " << redirect_;
 	ss << "\n      cgi : ";
-	for (size_t i = 0; i < cgi_.size(); i++) {
-		ss << cgi_[i] << ' ';
-	}
+	ss << cgi_;
 	ss << "\n      Iscgi   : " << IsCgi() << '\n';
 	ss << "      IsRoot  : " << IsRoot() << '\n';
 	ss << "      IsErrorPages : " << IsErrorPages() << '\n';
