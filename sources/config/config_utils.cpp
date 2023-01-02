@@ -1,8 +1,20 @@
 #include "config_utils.hpp"
-
+#include "character_const.hpp"
 #include <algorithm>
 #include <iostream>
 #include <sstream>
+
+std::string &ltrim(std::string &str) {
+	str.erase(0, str.find_first_not_of(WHITESPACE));
+	return str;
+}
+
+std::string &rtrim(std::string &str) {
+	str.erase(str.find_last_not_of(WHITESPACE) + 1);
+	return str;
+}
+
+std::string &trim(std::string &str) { return ltrim(rtrim(str)); }
 
 std::vector<std::string> Split(std::string input, char delimiter) {
 	std::vector<std::string> str;

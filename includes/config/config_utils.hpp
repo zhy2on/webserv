@@ -7,6 +7,9 @@
 #include "location_info.hpp"
 #include "server_info.hpp"
 
+std::string &ltrim(std::string &str);
+std::string &rtrim(std::string &str);
+std::string &trim(std::string &str);
 std::vector<std::string> Split(std::string input, char delimiter);
 std::vector<ServerInfo>::const_iterator FindServerInfoToRequestHost(
 	const std::string &server_name,
