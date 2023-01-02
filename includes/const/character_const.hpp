@@ -9,5 +9,6 @@
 #define HT '\t'
 #define SLASH '/'
 #define COLON ':'
+#define WHITESPACE " \r\n\t\v\f"
 
 #endif
