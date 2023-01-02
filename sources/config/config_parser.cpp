@@ -5,18 +5,6 @@
 #include <iostream>
 #include <sstream>
 
-std::string &ltrim(std::string &str) {
-	str.erase(0, str.find_first_not_of(WHITESPACE));
-	return str;
-}
-
-std::string &rtrim(std::string &str) {
-	str.erase(str.find_last_not_of(WHITESPACE) + 1);
-	return str;
-}
-
-std::string &trim(std::string &str) { return ltrim(rtrim(str)); }
-
 ConfigParser::ConfigParser(const char *file) {
 	std::ifstream in(file);
 	std::string line;
@@ -247,7 +235,12 @@ void ConfigParser::ParseConfigs(server_configs_type &server_configs,
 void ConfigParser::RunConfigParser(ConfigParser::server_configs_type &server_configs) {
 	std::vector<ServerInfo> server_blocks;
 	
-	this->Parse(server_blocks);
-	this->PrintConf(server_blocks);
-	this->ParseConfigs(server_configs, server_blocks);
+	Parse(server_blocks);
+	PrintConf(server_blocks);
+	ParseConfigs(server_configs, server_blocks);
+}
+
+void ConfigParser::ConfigSetUp(const std::string &config) {
+	// ConfigParser config_parser(config);
+
 }
