@@ -7,7 +7,8 @@ LocationInfo::LocationInfo()
 	  autoindex_(false),
 	  path_(""),
 	  root_(""),
-	  redirect_("") {}
+	  redirect_(""),
+	  upload_path_("") {}
 
 LocationInfo::~LocationInfo() {}
 
@@ -52,6 +53,8 @@ void LocationInfo::SetClientMaxBodySize(int client_max_body_size) {
 	this->client_max_body_size_ = client_max_body_size;
 }
 
+const std::string &LocationInfo::GetUploadPath() const { return this->upload_path_; }
+
 void LocationInfo::SetPath(const std::string &x) { this->path_ = x; }
 
 void LocationInfo::SetRoot(const std::string &x) { 
@@ -86,6 +89,8 @@ void LocationInfo::SetCgi(std::string &x) {
 void LocationInfo::SetAutoindex(const bool &x) { this->autoindex_ = x; }
 
 void LocationInfo::SetRedirect(const std::string &x) { this->redirect_ = x; }
+
+void LocationInfo::SetUploadPath(const std::string &x) { this->upload_path_ = x; }
 
 // is function
 bool LocationInfo::IsCgi() const {
@@ -132,6 +137,7 @@ std::string LocationInfo::ToString() const {
 	ss << "\n      allow_methods : ";
 	ss << allow_methods_;
 	ss << "\n      redirect : " << redirect_;
+	ss << "\n      upload_path: " << upload_path_;
 	ss << "\n      cgi : ";
 	ss << cgi_;
 	ss << "\n      Iscgi   : " << IsCgi() << '\n';

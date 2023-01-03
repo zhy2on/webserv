@@ -190,6 +190,8 @@ void ConfigParser::SetLocation(LocationInfo &location, std::string key,
 		if (value == "on") location.SetAutoindex(true);
 	} else if (key == "redirect") {
 		location.SetRedirect(value);
+	} else if (key == "upload_path") {
+		location.SetUploadPath(value);
 	} else {
 		throw LocationException();
 	}
