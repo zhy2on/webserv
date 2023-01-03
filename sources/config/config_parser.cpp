@@ -242,5 +242,4 @@ void ConfigParser::RunConfigParser(ConfigParser::server_configs_type &server_con
 // ConfigParser::server_configs_type ConfigParser::ConfigSetUp(const std::string &config) {
 // 	std::vector<ServerInfo> server_blocks;
 // 	ConfigParser::server_configs_type server_configs;
-
 // }

@@ -53,7 +53,6 @@ class LocationInfo {
 	Index index_;
 	ErrorPages error_pages_;
 	AllowMethods allow_methods_;
-	// std::vector<std::string> cgi_;
 	Cgi cgi_;
 	std::string redirect_;
 };
