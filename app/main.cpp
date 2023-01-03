@@ -16,7 +16,6 @@ int main(int argc, char **argv) {
 		config = argv[1];
 	ConfigParser::server_configs_type server_configs;
 	try {
-		//server_configs = ConfigParse::ConfigSetup(config);
 		ConfigParser config_parser(config);
 		config_parser.RunConfigParser(server_configs);
 		Webserv webserv(server_configs);

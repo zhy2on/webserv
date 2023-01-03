@@ -22,11 +22,10 @@ class ConfigParser {
 	void Parse(server_infos_type &server_blocks);
 	void PrintConf(server_infos_type &server_blocks);
 
-	void ParseConfigs(server_configs_type &server_configs,
-					  std::vector<ServerInfo> &server_blocks);
+	void ParseConfigs(server_configs_type &server_configs, std::vector<ServerInfo> &server_blocks);
 
 	void RunConfigParser(ConfigParser::server_configs_type &server_configs);
-	// static ConfigParser::server_configs_type ConfigSetUp(const std::string &config);
+	static ConfigParser::server_configs_type ConfigSetUp(const std::string &config);
 	class FstreamException : public std::exception {
 	   public:
 		const char *what() const throw() {
