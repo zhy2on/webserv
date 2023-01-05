@@ -219,7 +219,7 @@ void EventExecutor::ReadFile(KqueueHandler &kqueue_handler, struct kevent &event
 void EventExecutor::WriteFile(KqueueHandler &kqueue_handler, struct kevent &event) {
 	Udata *user_data = reinterpret_cast<Udata *>(event.udata);
 	RequestMessage &request_message = user_data->request_message_;
-	std::string body = request_message.GetBody();
+	std::string &body = request_message.GetBody();
 
 	ssize_t result =
 			write(event.ident, body.c_str() + request_message.current_length_,
@@ -243,7 +243,7 @@ void EventExecutor::WriteFile(KqueueHandler &kqueue_handler, struct kevent &even
 void EventExecutor::WriteReqBodyToPipe(struct kevent &event) {
 	Udata *user_data = reinterpret_cast<Udata *>(event.udata);
 	RequestMessage &request_message = user_data->request_message_;
-	std::string body = request_message.GetBody();
+	std::string &body = request_message.GetBody();
 
 	ssize_t result = write(event.ident, body.c_str() + request_message.current_length_,
 						   body.length() - request_message.current_length_);
