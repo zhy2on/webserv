@@ -69,7 +69,7 @@ void CgiHandler::SetCgiEnvs(const RequestMessage &request, ClientSocket *client_
 	cgi_envs_["CONTENT_TYPE"] = request.GetHeaderValue("content-type");
 	std::stringstream ss;
 	ss << request.GetBody().length();
-	cgi_envs_["CONTENT_LENGTH"] = ss.str();
+	// cgi_envs_["CONTENT_LENGTH"] = ss.str();
 	cgi_envs_["SERVER_PROTOCOL"] = "HTTP/1.1";	// HTTP version
 	cgi_envs_["SERVER_SOFTWARE"] = "webserv/1.0";
 
@@ -97,9 +97,9 @@ void CgiHandler::OpenPipe(KqueueHandler &kq_handler, Udata *user_data) {
 		perror("pipe: ");
 	}
 	fcntl(cgi_result_pipe_[READ], F_SETFL, O_NONBLOCK);
-	kq_handler.AddReadEvent(cgi_result_pipe_[READ], user_data);
+	user_data->pipe_d_ = cgi_result_pipe_[READ];
 
-	user_data->ChangeState(Udata::WRITE_TO_PIPE);
+	user_data->ChangeState(Udata::CGI_PIPE);
 }
 
 void CgiHandler::SetupChildCgi() {

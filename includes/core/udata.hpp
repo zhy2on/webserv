@@ -16,8 +16,7 @@ class Udata {
 		RECV_REQUEST,
 		READ_FILE,
 		WRITE_FILE,
-		WRITE_TO_PIPE,
-		READ_FROM_PIPE,
+		CGI_PIPE,
 		SEND_RESPONSE,
 		CLOSE
 	};
@@ -33,6 +32,7 @@ class Udata {
 
 	int state_;
 	int sock_d_;
+	int pipe_d_;
 };
 
 #endif	// WEBSERV_SOURCES_CORE_UDATA_H_

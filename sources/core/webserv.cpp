@@ -99,6 +99,7 @@ void Webserv::RunServer() {
 		for (size_t i = 0; i < event_list.size(); ++i) {
 			struct kevent event = event_list[i];
 			if (IsProcessExit(event)) {
+				std::cout << "PROC " << event.ident << std::endl;
 				DeleteProcEvent(event);
 				continue;
 			}
@@ -155,12 +156,8 @@ void Webserv::HandleEvent(struct kevent &event) {
 			case Udata::WRITE_FILE:
 				HandleWriteFile(event);
 				break;
-			case Udata::WRITE_TO_PIPE:
-				HandleWriteToPipe(event);
-				break;	// CGI
-			case Udata::READ_FROM_PIPE:
-				HandleReadFromPipe(event);
-				break;	// CGI
+			case Udata::CGI_PIPE:
+				HandleCgiPipeEvent(event);
 			case Udata::SEND_RESPONSE:
 				HandleSendResponseEvent(event);
 				break;
@@ -189,12 +186,12 @@ void Webserv::HandleWriteFile(struct kevent &event) {
 	EventExecutor::WriteFile(kq_handler_, event);
 }
 
-void Webserv::HandleWriteToPipe(struct kevent &event) {
-	EventExecutor::WriteReqBodyToPipe(event);
-}
-
-void Webserv::HandleReadFromPipe(struct kevent &event) {
-	EventExecutor::ReadCgiResultFromPipe(kq_handler_, event);
+void Webserv::HandleCgiPipeEvent(struct kevent &event) {
+	if (event.filter & EVFILT_WRITE) {
+		EventExecutor::WriteReqBodyToPipe(kq_handler_, event);
+	} else if (event.filter & EVFILT_READ) {
+		EventExecutor::ReadCgiResultFromPipe(kq_handler_, event);
+	}
 }
 
 void Webserv::HandleSendResponseEvent(struct kevent &event) {
