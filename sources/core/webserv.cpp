@@ -158,6 +158,7 @@ void Webserv::HandleEvent(struct kevent &event) {
 				break;
 			case Udata::CGI_PIPE:
 				HandleCgiPipeEvent(event);
+				break;
 			case Udata::SEND_RESPONSE:
 				HandleSendResponseEvent(event);
 				break;

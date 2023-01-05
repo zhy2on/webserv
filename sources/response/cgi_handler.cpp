@@ -97,7 +97,7 @@ void CgiHandler::OpenPipe(KqueueHandler &kq_handler, Udata *user_data) {
 		perror("pipe: ");
 	}
 	fcntl(cgi_result_pipe_[READ], F_SETFL, O_NONBLOCK);
-	user_data->pipe_d_ = cgi_result_pipe_[READ];
+	kq_handler.AddReadEvent(cgi_result_pipe_[READ], user_data);
 
 	user_data->ChangeState(Udata::CGI_PIPE);
 }
