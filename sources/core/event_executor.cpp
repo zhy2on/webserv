@@ -257,7 +257,7 @@ void EventExecutor::WriteReqBodyToPipe(KqueueHandler &kqueue_handler,
 	request_message.current_length_ += result;
 	if (request_message.current_length_ >= body.length()) {
 		close(event.ident);
-		kqueue_handler.AddReadEvent(user_data->pipe_d_, user_data);
+		(void)kqueue_handler;
 	}
 	// AddEvent는 이미 SetupCgi에서 해주었었기 때문에 할 필요가 없다. ChangeState만 해주면 됨
 }
