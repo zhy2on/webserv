@@ -333,12 +333,13 @@ void EventExecutor::SendResponse(KqueueHandler &kqueue_handler, struct kevent &e
 	}
 	const std::string &response_str = response.ToString();
 	ssize_t send_len = send(fd,
-							response_str.c_str() + response.current_length_,
-							response_str.length() - response.current_length_, 0);
+							response_str.c_str(),
+							response_str.length(), 0);
 	if (send_len < 0) {
 		throw HttpException(INTERNAL_SERVER_ERROR, "send response send() error");
 	}
-	response.AddCurrentLength(send_len);
+	// response.AddCurrentLength(send_len);
+	response.total_response_message_.erase(0, send_len);
 	// std::cout << response_str.c_str() << std::endl;
 	// std::cout << send_len << std::endl;
 	// std::cout << response_str.c_str() << std::endl;

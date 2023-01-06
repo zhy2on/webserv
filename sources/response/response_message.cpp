@@ -49,7 +49,7 @@ void ResponseMessage::AddConnection(const std::string &connection) {
 }
 
 bool ResponseMessage::IsDone() {
-	if (current_length_ >= total_length_) {
+	if (total_response_message_.size() == 0) {
 		return true;
 	}
 	return false;
@@ -108,14 +108,6 @@ void ResponseMessage::ParseHeader(const std::string &header_line) {
 
 
 const std::string &ResponseMessage::ToString() {
-	// std::stringstream ss;
-
-	// std::string status_line = status_line_.ToString();
-	// std::string headers = headers_.ToString();
-	// total_length_ = status_line.length() + headers.length() + body_.length();
-
-	// ss << status_line << headers << body_;
-	// return ss.str();
 	if (total_length_)
 		return (total_response_message_);
 	total_response_message_.append(status_line_.ToString());
